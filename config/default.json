@@ -1,0 +1,4 @@
+{
+    "mongoURI": "mongodb+srv://db_stressclinic:yalestressclinic@cluster0-fzzss.mongodb.net/test?retryWrites=true&w=majority",
+    "jwtSecret": "dhjnffcjnqjnqkf"
+}
