@@ -40,6 +40,8 @@ router.get('/', async (req, res) => {
       .select('-password')
       .select('-email');
 
+    console.log("PROFILES:", profiles);
+
     res.json(profiles);
   } catch (err) {
     console.error(err.message);
