@@ -5,6 +5,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const config = require('config');
 const { check, validationResult } = require('express-validator');
+const { uniqueNamesGenerator } = require('unique-names-generator');
 
 const User = require('../../models/User');
 
@@ -25,7 +26,7 @@ router.post(
             return res.status(400).json({ errors: errors.array() });
         }
 
-        const { name, email, password } = req.body;
+        const { email, password } = req.body;
 
         try {
             let user = await User.findOne({ email });
@@ -39,6 +40,8 @@ router.post(
                 r: 'pg',
                 d: 'mm'
             })
+
+            const name = uniqueNamesGenerator();
 
             user = new User({
                 name,
