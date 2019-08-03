@@ -58,6 +58,7 @@ router.get('/', auth, async (req, res) => {
     }
 });
 
+
 // @route   GET api/posts/:id
 // @desc    Get post by ID
 // @access  Private
@@ -80,6 +81,21 @@ router.get('/:id', auth, async (req, res) => {
         res.status(500).send('Server Error');
     }
 });
+
+// @route   GET api/posts/user/:id
+// @desc    Get all of a user's posts
+// @access  Private
+router.get('/user/:id', auth, async (req, res) => {
+    try {
+        var query = { user: req.params.id};
+        const posts = await Post.find(query).sort({ date: -1 });
+        res.json(posts);
+    } catch (err) {
+        consapi/postsole.log(err.message);
+        res.status(500).send('Server Error');
+    }
+});
+
 
 // @route   DELETE api/posts/:id
 // @desc    Delete a post

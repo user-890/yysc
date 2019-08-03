@@ -14,8 +14,6 @@ router.get('/me', auth, async (req, res) => {
       .select('-password')
       .select('-email');
 
-    console.log(profile);
-
     if (!profile) {
       return res
         .status(400)
@@ -39,8 +37,6 @@ router.get('/', async (req, res) => {
     const profiles = await User.find()
       .select('-password')
       .select('-email');
-
-    console.log("PROFILES:", profiles);
 
     res.json(profiles);
   } catch (err) {

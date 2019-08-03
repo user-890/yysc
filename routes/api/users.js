@@ -25,14 +25,22 @@ router.post(
         if(!errors.isEmpty()) {
             return res.status(400).json({ errors: errors.array() });
         }
+        
+        console.log(req.body);
 
-        const { email, password, admin } = req.body;
+        const { email, password, admin, adminCode } = req.body;
 
         try {
             let user = await User.findOne({ email });
 
             if (user) {
                 return res.status(400).json({ errors: [{ msg: 'User already exists' }] });
+            }
+
+            console.log("CODE: ", adminCode);
+            if (admin && adminCode !== 'yysc2019') {
+                
+                return res.status(400).json({ errors: [{ msg: 'Incorrect admin code' }] });
             }
 
             const avatar = gravatar.url(email, {
