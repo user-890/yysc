@@ -52,15 +52,17 @@ router.post(
 // @access  Private
 router.get('/task', auth, async (req, res) => {
   try {
+    const today = moment().startOf('day');
     const query = {
-      startDate: {
-        $lte: moment(moment().startOf('day'))
+      endDate: {
+        '$gte': moment(today)
           .endOf('day')
           .toDate()
       }
     };
 
     const tasks = await Task.find(query).sort({ startDate: -1 });
+
     res.json(tasks);
   } catch (err) {
     console.log(err.message);
