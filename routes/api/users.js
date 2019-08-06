@@ -37,7 +37,6 @@ router.post(
                 return res.status(400).json({ errors: [{ msg: 'User already exists' }] });
             }
 
-            console.log("CODE: ", adminCode);
             if (admin && adminCode !== 'yysc2019') {
                 
                 return res.status(400).json({ errors: [{ msg: 'Incorrect admin code' }] });

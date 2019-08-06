@@ -53,7 +53,7 @@ router.get('/', auth, async (req, res) => {
         const posts = await Post.find().sort({ date: -1 });
         res.json(posts);
     } catch (err) {
-        consapi/postsole.log(err.message);
+        console.log(err.message);
         res.status(500).send('Server Error');
     }
 });
@@ -91,7 +91,7 @@ router.get('/user/:id', auth, async (req, res) => {
         const posts = await Post.find(query).sort({ date: -1 });
         res.json(posts);
     } catch (err) {
-        consapi/postsole.log(err.message);
+        console.log(err.message);
         res.status(500).send('Server Error');
     }
 });
