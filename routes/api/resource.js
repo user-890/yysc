@@ -5,6 +5,7 @@ const auth = require('../../middleware/auth');
 const moment = require('moment');
 
 const Task = require('../../models/Task');
+const Resource = require('../../models/Resource');
 
 // @route   POST api/resource/task
 // @desc    Create a Task
@@ -55,7 +56,7 @@ router.get('/task', auth, async (req, res) => {
     const today = moment().startOf('day');
     const query = {
       endDate: {
-        '$gte': moment(today)
+        $gte: moment(today)
           .endOf('day')
           .toDate()
       }
@@ -67,6 +68,59 @@ router.get('/task', auth, async (req, res) => {
   } catch (err) {
     console.log(err.message);
     res.status(500).send('Server Error');
+  }
+});
+
+// @route   POST api/resource
+// @desc    Create a Resource
+// @access  Private
+router.post(
+  '/',
+  [
+    auth,
+    [
+      check('desc', 'A description is required')
+        .not()
+        .isEmpty(),
+      check('name', 'A name is required')
+        .not()
+        .isEmpty()
+    ]
+  ],
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    try {
+      const newResource = new Resource({
+        name: req.body.name,
+        desc: req.body.desc,
+        links: req.body.links
+      });
+
+      const resource = await newResource.save();
+      console.log(resource);
+
+      res.json(resource);
+    } catch (err) {
+      console.error(err.message);
+      res.status(500).send('Server Error');
+    }
+  }
+);
+
+// @route   GET api/resource
+// @desc    Get all resources
+// @access  Private
+router.get('/', auth, async (req, res) => {
+  try {
+      const resources = await Resource.find();
+      res.json(resources);
+  } catch (err) {
+      console.log(err.message);
+      res.status(500).send('Server Error');
   }
 });
 
