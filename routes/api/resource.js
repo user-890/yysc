@@ -111,16 +111,30 @@ router.post(
   }
 );
 
-// @route   GET api/resource
-// @desc    Get all resources
+// @route   GET api/resource/:id
+// @desc    Get resource by Id
 // @access  Private
 router.get('/', auth, async (req, res) => {
   try {
-      const resources = await Resource.find();
-      res.json(resources);
+    const resources = await Resource.find();
+    res.json(resources);
   } catch (err) {
-      console.log(err.message);
-      res.status(500).send('Server Error');
+    console.log(err.message);
+    res.status(500).send('Server Error');
+  }
+});
+
+// @route   GET api/resource
+// @desc    Get all resources
+// @access  Private
+router.get('/:id', auth, async (req, res) => {
+  try {
+    const resource = await Resource.findById(req.params.id);
+
+    res.json(resource);
+  } catch (err) {
+    console.log(err.message);
+    res.status(500).send('Server Error');
   }
 });
 
