@@ -111,7 +111,7 @@ router.post(
   }
 );
 
-// @route   GET api/resource/:id
+// @route   GET api/resource
 // @desc    Get resource by Id
 // @access  Private
 router.get('/', auth, async (req, res) => {
@@ -125,7 +125,7 @@ router.get('/', auth, async (req, res) => {
 });
 
 // @route   GET api/resource
-// @desc    Get all resources
+// @desc    Get resource by Id
 // @access  Private
 router.get('/:id', auth, async (req, res) => {
   try {
@@ -137,5 +137,62 @@ router.get('/:id', auth, async (req, res) => {
     res.status(500).send('Server Error');
   }
 });
+
+// @route   PUT api/resource/like/:id
+// @desc    Like a resource
+// @access  Private
+router.put('/like/:id', auth, async (req, res) => {
+  try {
+    const resource = await Resource.findById(req.params.id);
+
+    // Check if the resource has already been liked.
+    if (
+      resource.likes.filter((like) => like.user.toString() === req.user.id)
+        .length > 0
+    ) {
+      return res.status(400).json({ msg: 'Resource already liked.' });
+    }
+
+    resource.likes.unshift({ user: req.user.id });
+
+    await resource.save();
+
+    console.log(resource);
+
+    res.json(resource.likes);
+  } catch (err) {
+    console.log(err.message);
+
+    if (err.kind === 'ObjectId') {
+      return res.status(404).json({ msg: 'Resource not found' });
+    }
+
+    res.status(500).send('Server Error');
+  }
+});
+
+// @route   GET api/resource/user/:id
+// @desc    Retrieve resources liked by the user
+// @access  Private
+router.get('/user/:id', auth, async(req, res) => {
+  try {
+
+    const resources = await Resource.find();
+    viewedResources = []
+
+    resources.map(resource => {
+      if (
+        resource.likes.filter((like) => like.user.toString() === req.user.id)
+          .length > 0
+      ) {
+        viewedResources.push(resource);
+      }
+    })
+
+    res.json(viewedResources);
+  } catch(err) {
+
+  }
+})
 
 module.exports = router;

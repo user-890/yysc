@@ -1,6 +1,7 @@
 const express = require('express');
 const connectDB = require('./config/db');
 const cors = require('cors');
+const socket = require('socket.io');
 
 const app = express();
 
@@ -20,11 +21,23 @@ app.use('/api/profile', require('./routes/api/profile'));
 app.use('/api/posts', require('./routes/api/posts'));
 app.use('/api/upload', require('./routes/api/upload'));
 app.use('/api/resource', require('./routes/api/resource'));
+app.use('/api/message', require('./routes/api/message'));
+app.use('/api/log', require('./routes/api/tracking'));
 
 app.get('/', (req, res) => res.send('API Running...'));
 
 const PORT = process.env.PORT || 5000;
 
-app.listen(PORT, () => {
+const server = app.listen(PORT, () => {
   console.log(`Server started on port ${PORT}`);
+});
+
+// Socket 
+const io = socket(server);
+io.on('connection', (socket) => {
+  console.log('Socket connected!');
+
+  socket.on('chat', (data) => {
+    io.sockets.emit('chat', data);
+  });
 });

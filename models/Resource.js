@@ -9,7 +9,20 @@ const ResourceSchema = new Schema({
   desc: {
     type: String
   },
-  links: [{ link: String, url: String }]
+  links: [
+    {
+      link: String,
+      url: String
+    }
+  ],
+  likes: [
+    {
+      user: {
+        type: Schema.Types.ObjectId,
+        ref: 'users'
+      }
+    }
+  ]
 });
 
 module.exports = Resource = mongoose.model('resource', ResourceSchema);
