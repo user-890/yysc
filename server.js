@@ -2,6 +2,7 @@ const express = require('express');
 const connectDB = require('./config/db');
 const cors = require('cors');
 const socket = require('socket.io');
+const socketEvents = require('./middleware/socketEvents');
 
 const app = express();
 
@@ -34,10 +35,5 @@ const server = app.listen(PORT, () => {
 
 // Socket 
 const io = socket(server);
-io.on('connection', (socket) => {
-  console.log('Socket connected!');
+socketEvents(io);
 
-  socket.on('chat', (data) => {
-    io.sockets.emit('chat', data);
-  });
-});
