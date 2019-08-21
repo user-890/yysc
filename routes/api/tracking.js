@@ -15,14 +15,14 @@ router.post('/page-view', auth, async (req, res) => {
 
     const newEvent = new Event({
       category: category,
-      action: action, 
+      action: action,
       date: new Date(),
       payload: payload,
       user: req.user.id
     });
 
     const event = await newEvent.save();
-    
+
     res.json(event);
   } catch (err) {
     console.error(err.message);
@@ -35,11 +35,25 @@ router.post('/page-view', auth, async (req, res) => {
 // @access  Private
 router.get('/', auth, async (req, res) => {
   try {
-      const logs = await Event.find().sort({ date: -1 });
-      res.json(logs);
+    const logs = await Event.find().sort({ date: -1 });
+    res.json(logs);
   } catch (err) {
-      console.log(err.message);
-      res.status(500).send('Server Error');
+    console.log(err.message);
+    res.status(500).send('Server Error');
+  }
+});
+
+// @route   GET api/log/:id
+// @desc    Get all logs
+// @access  Private
+router.get('/:id', auth, async (req, res) => {
+  try {
+    const logs = await Event.find({ user: req.params.id });
+    console.log(logs);
+    res.json(logs);
+  } catch (err) {
+    console.log(err.message);
+    res.status(500).send('Server Error');
   }
 });
 
