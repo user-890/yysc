@@ -23,7 +23,7 @@
     "multer-gridfs-storage": "^3.3.0",
     "nodemon": "^1.19.1",
     "ra-data-json-server": "^2.9.5",
-    "react-admin": "^2.9.5",
+    "react-admin": "^4.7.0",
     "react-redux": "^7.1.0",
     "redux": "^4.0.4",
     "redux-devtools-extension": "^2.13.8",
